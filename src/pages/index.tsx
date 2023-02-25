@@ -1,14 +1,12 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
+// import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { Modal } from "flowbite/plugin";
-import type { ModalOptions, ModalInterface } from "flowbite";
 
 import { api } from "../utils/api";
 
 const Home: NextPage = () => {
-  const hello = api.example.hello.useQuery({ text: "" });
+  const hello = api.userRoute.hello.useQuery({ text: "Dancers & Friends" });
 
   return (
     <>
@@ -35,33 +33,14 @@ const Home: NextPage = () => {
 
 export default Home;
 
+// This may all be unnecessary
 const AuthShowcase: React.FC = () => {
   const { data: sessionData } = useSession();
 
-  const { data: secretMessage } = api.example.getSecretMessage.useQuery(
+  const { data: secretMessage } = api.userRoute.getSecretMessage.useQuery(
     undefined, // no input
     { enabled: sessionData?.user !== undefined }
   );
-
-  // const $modalElement = document.querySelector("#modalEl");
-
-  // const modalOptions = {
-  //   placement: "bottom-right",
-  //   backdrop: "dynamic",
-  //   backdropClasses:
-  //     "bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40",
-  //   onHide: () => {
-  //     console.log("modal is hidden");
-  //   },
-  //   onShow: () => {
-  //     console.log("modal is shown");
-  //   },
-  //   onToggle: () => {
-  //     console.log("modal has been toggled");
-  //   },
-  // };
-
-  // const modal = new Modal($modalElement, modalOptions);
 
   return (
     <div className="flex flex-col items-center justify-center gap-4">
@@ -69,9 +48,6 @@ const AuthShowcase: React.FC = () => {
         {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
         {secretMessage && <span> - {secretMessage}</span>}
       </p>
-      {/* <div>
-        <script>modal.show();</script>
-      </div> */}
       <button
         className="rounded-full bg-white/10 px-10 py-3 font-semibold text-black no-underline transition hover:bg-white/20"
         onClick={sessionData ? () => void signOut() : () => void signIn()}
